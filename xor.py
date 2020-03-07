@@ -37,7 +37,7 @@ def f(x, w1, w2):
 
 	return a1, z1, a2, z2
 
-def b(a2, x, z1, z2, y):
+def b(a1, x, z1, z2, y):
 	delta2 = z2 - y
 	Delta2 = np.matmul(z1.T, delta2)
 	delta1 = delta2.dot(w2[1:,:].T) * sigmoid_d(a1)
@@ -47,18 +47,18 @@ def b(a2, x, z1, z2, y):
 
 # training loop
 for i in range(epochs):
-	 a1, z1, a2, z2 = f(x, w1, w2)
+	a1, z1, a2, z2 = f(x, w1, w2)
 
-	 delta2, Delta1, Delta2 = b(a1, x, z1, z2, y)
+	delta2, Delta1, Delta2 = b(a1, x, z1, z2, y)
 
-	 w1 -= lr*(1/m)*Delta1
-	 w2 -= lr*(1/m)*Delta2
+	w1 -= lr*(1/m)*Delta1
+	w2 -= lr*(1/m)*Delta2
 
-	 c = np.mean(np.abs(delta2))
-	 costs.append(c)
+	c = np.mean(np.abs(delta2))
+	costs.append(c)
 
-	 if i%1000 is 0:
-	 	print(f"Iteration: {i}. Error: {c}")
+	if i%1000 is 0:
+		print(f"Iteration: {i}. Error: {c}")
 
 print("\nTRAINING COMPLETE\n")
 
