@@ -1,20 +1,19 @@
 import numpy as np
 
-# first column is bias
 x = np.array([
-			[1, 1, 0],
-			[1, 0, 1],
-			[1, 0, 0],
-			[1, 1, 1]])
+			[1, 0],
+			[0, 1],
+			[0, 0],
+			[1, 1]])
 
 y = np.array([[1], [1], [0], [0]])
 
 # hyparameters
-w1 = np.random.randn(3, 5)
-w2 = np.random.randn(6, 1)
+w1 = np.random.randn(2, 4)
+w2 = np.random.randn(4, 1)
 lr = 0.09
 costs = []
-epochs = 5000
+epochs = 10000
 
 m = len(x)
 
@@ -29,9 +28,6 @@ def forward(x, w1, w2):
 	a1 = np.matmul(x, w1)
 	z1 = sigmoid(a1)
 
-	bias = np.ones((len(z1), 1))
-	z1 = np.concatenate((bias, z1), axis=1)
-
 	a2 = np.matmul(z1, w2)
 	z2 = sigmoid(a2)
 
@@ -40,7 +36,8 @@ def forward(x, w1, w2):
 def backpropagation(a1, x, z1, z2, y):
 	delta2 = z2 - y
 	Delta2 = np.matmul(z1.T, delta2)
-	delta1 = delta2.dot(w2[1:,:].T) * sigmoid_d(a1)
+
+	delta1 = np.matmul(delta2, w2.T) * sigmoid_d(a1)
 	Delta1 = np.matmul(x.T, delta1)
 
 	return delta2, Delta1, Delta2
@@ -66,15 +63,25 @@ def predict(x, w1, w2):
 	a1 = np.matmul(x, w1)
 	z1 = sigmoid(a1)
 
-	bias = np.ones((len(z1), 1))
-	z1 = np.concatenate((bias, z1), axis=1)
-
 	a2 = np.matmul(z1, w2)
 	z2 = sigmoid(a2)
 
 	return z2
 
-# predictions
-print(f"W1 {w1}")
-print(f"W2 {w2}")
-print(np.round(predict(x, w1, w2)))
+rearrange_x = np.array([[1, 1],[0, 0], [1, 0], [0, 1]])
+
+print("REARRANGE XOR INPUT VALUES")
+
+print("PREDICTIONS")
+predictions = np.round(predict(rearrange_x, w1, w2))
+
+for i in range(rearrange_x.shape[0]):
+	print(rearrange_x[i], "->", predictions[i])
+
+print("ORIGINAL XOR INPUT VALUES")
+
+print("PREDICTIONS")
+predictions = np.round(predict(x, w1, w2))
+
+for i in range(x.shape[0]):
+	print(x[i], "->", predictions[i])
